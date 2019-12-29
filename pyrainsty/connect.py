@@ -5,25 +5,35 @@
 @author: rainsty
 @file:   connect.py
 @time:   2019-12-29 10:06:29
-@description:
+@description: connect data source
 """
 
 import pymysql
 
 
 class MysqlConnect(object):
+    """
+    example:
+        from pyrainsty import connect
+        config = dict(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='123456',
+            database='test',
+            charset='utf8'
+        )
+
+        mc = connect.MysqlConnect(config)
+        mc.create_connect()
+        state, result = mc.get_sql_data('select * from test.test limit 1')
+        if not state:
+            print(result)
+
+        print(result)
+    """
 
     def __init__(self, config, **kwargs):
-        """
-            self.config = dict(
-                host='127.0.0.1',
-                port=3306,
-                user='root',
-                password='123456',
-                database='test',
-                charset='utf8'
-            )
-        """
         self.__config = config
         self.__kwargs = kwargs
         self.__conn = None
