@@ -54,8 +54,7 @@ class MysqlConnect(object):
     def check_connect(self):
         try:
             self.__conn.ping()
-        except AttributeError as e:
-            del e
+        except (AttributeError, ):
             self.create_connect()
 
     def close_connect(self):
@@ -76,17 +75,16 @@ class MysqlConnect(object):
                 self.__cursor.execute(sql)
 
             _data = self.__cursor.fetchall()
-            _column = self.__cursor.description
+            _column = [c[0] for c in self.__cursor.description]
 
-            _list = []
-            for d in _data:
+            result = []
+            for data in _data:
                 _dict = {}
-                for i in range(len(d)):
-                    _dict[_column[i][0]] = d[i]
-                if _dict:
-                    _list.append(_dict)
+                for k, v in zip(_column, data):
+                    _dict[k] = v
+                result.append(_dict)
 
-            return True, _list
+            return True, result
         except BaseException as e:
             return False, e
 

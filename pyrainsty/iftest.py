@@ -33,11 +33,12 @@ class InterfaceTest(object):
             api.configuration()
 
     """
-    def __init__(self, base_url, version='', username=None, password=None):
+    def __init__(self, base_url, version='', username=None, password=None, is_login=None):
         self.base_url = base_url + version if version else ''
         self.username = username
         self.password = password
         self.token = ''
+        self.is_login = is_login
         self.login()
 
     @property
@@ -132,14 +133,18 @@ class InterfaceTest(object):
         return response_data
 
     def login(self, path='/login'):
-        print('')
-        print(self.base_url + path)
-        payload = dict(
-            username=self.username if self.username else 'admin',
-            password=self.password if self.password else '123456'
-        )
-        response = requests.post(
-            url=self.base_url + path, data=json.dumps(payload), headers=self.headers)
-        response_data = response.json()
-        self.token = response_data.get('token', '')
-        print(self.token)
+        """You can override this method..."""
+        if self.is_login:
+            print('')
+            print(self.base_url + path)
+            payload = dict(
+                username=self.username if self.username else 'admin',
+                password=self.password if self.password else '123456'
+            )
+            response = requests.post(
+                url=self.base_url + path, data=json.dumps(payload), headers=self.headers)
+            response_data = response.json()
+            self.token = response_data.get('token', '')
+            print(self.token)
+        else:
+            print('No login...')
