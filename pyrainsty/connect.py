@@ -66,7 +66,7 @@ class MysqlConnect(object):
     def __del__(self):
         self.close_connect()
 
-    def get_sql_data(self, sql, params=None):
+    def get_data(self, sql, params=None):
         try:
             self.check_connect()
             if params:
@@ -75,20 +75,14 @@ class MysqlConnect(object):
                 self.__cursor.execute(sql)
 
             _data = self.__cursor.fetchall()
-            _column = [c[0] for c in self.__cursor.description]
+            _column = self.__cursor.description
 
-            result = []
-            for data in _data:
-                _dict = {}
-                for k, v in zip(_column, data):
-                    _dict[k] = v
-                result.append(_dict)
-
+            result = [dict(zip([column[0] for column in _column], data)) for data in _data]
             return True, result
         except BaseException as e:
             return False, e
 
-    def exec_sql_cmd(self, sql, params=None):
+    def exec_cmd(self, sql, params=None):
         try:
             self.check_connect()
             if params:
