@@ -26,7 +26,7 @@ class MysqlConnect(object):
 
         mc = connect.MysqlConnect(config)
         mc.create_connect()
-        state, result = mc.get_sql_data('select * from test.test limit 1')
+        state, result = mc.get_data('select * from test.test limit 1')
         if not state:
             print(result)
 

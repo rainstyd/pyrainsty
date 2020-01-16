@@ -33,7 +33,7 @@ class InterfaceTest(object):
             api.configuration()
 
     """
-    def __init__(self, base_url, version='', username=None, password=None, is_login=None):
+    def __init__(self, base_url, version='', username=None, password=None, is_login=False):
         self.base_url = base_url + version if version else ''
         self.username = username
         self.password = password
