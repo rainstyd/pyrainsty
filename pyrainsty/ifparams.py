@@ -37,6 +37,7 @@ class IfParamsCheck(object):
         e = ICP.check_datetime_format(name='e', value='2020-01-01', _format='%Y-%m-%d')
         f = ICP.check_in_list(name='f', value=1, _list=[1, 2, 3])
         g = ICP.check_in_regex(name='g', value='aaa', _regex=r'a.*')
+        h = ICP.check_in_regex(name='h', value='127.6.0.1a', _regex=ICP.get_regex_str('ipv4'))
 
         print(a)
         print(b)
@@ -45,6 +46,8 @@ class IfParamsCheck(object):
         print(e)
         print(f)
         print(g)
+        print(h)
+        print(ifparams.IfParamsCheck.__doc__)
     except ifparams.ParamError as e:
         print(e.name)
         print(e.desc)
@@ -53,6 +56,15 @@ class IfParamsCheck(object):
 
     def __init__(self):
         self.param_error = ParamError
+
+    @staticmethod
+    def get_regex_str(key=None):
+        _dict = dict(
+            ipv4=r'((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)',
+        )
+        if key:
+            return _dict.get(key, '')
+        return _dict
 
     def _not_in_value_range_error(self, name=None, _range=None):
         return self.param_error('The value of {} not in {}.'.format(name, _range))
@@ -91,7 +103,11 @@ class IfParamsCheck(object):
     def _check_regex(self, value=None, _regex=None):
         if not _regex:
             raise self._not_regex_error()
-        return re.match(_regex, value).group()
+        result = re.match(_regex, value)
+        if result:
+            return result.group()
+        else:
+            return None
 
     def check_int(self, name=None, value=None):
         """
