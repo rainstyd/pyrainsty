@@ -54,12 +54,14 @@ class MysqlConnect(object):
     def check_connect(self):
         try:
             self.__conn.ping()
-        except (AttributeError, ):
+        except (AttributeError,):
             self.create_connect()
 
     def close_connect(self):
-        self.__cursor.close()
-        self.__conn.close()
+        if self.__cursor:
+            self.__cursor.close()
+        if self.__conn:
+            self.__conn.close()
         self.__cursor = None
         self.__conn = None
 
@@ -89,7 +91,8 @@ class MysqlConnect(object):
                 self.__cursor.execute(sql, params)
             else:
                 self.__cursor.execute(sql)
-
+            self.__conn.commit()
             return True, None
         except BaseException as e:
+            self.__conn.rollback()
             return False, e
