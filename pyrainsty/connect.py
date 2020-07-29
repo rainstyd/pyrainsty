@@ -28,13 +28,13 @@ class MysqlConnect(object):
         mc.create_connect()
         state, result = mc.get_data('select * from test.test limit 1')
         if not state:
+            print('error')
+        else:
             print(result)
-
-        print(result)
     """
 
-    def __init__(self, config, **kwargs):
-        self.__config = config
+    def __init__(self, _config, **kwargs):
+        self.__config = _config
         self.__kwargs = kwargs
         self.__conn = None
         self.__cursor = None
@@ -79,20 +79,20 @@ class MysqlConnect(object):
             _data = self.__cursor.fetchall()
             _column = self.__cursor.description
 
-            result = [dict(zip([column[0] for column in _column], data)) for data in _data]
-            return True, result
-        except BaseException as e:
-            return False, e
+            _result = [dict(zip([column[0] for column in _column], data)) for data in _data]
+            return True, _result
+        except BaseException as _e:
+            return False, _e
 
     def exec_cmd(self, sql, params=None):
         try:
             self.check_connect()
             if params:
-                self.__cursor.execute(sql, params)
+                self.__cursor.executemany(sql, params)
             else:
                 self.__cursor.execute(sql)
             self.__conn.commit()
             return True, None
-        except BaseException as e:
+        except BaseException as _e:
             self.__conn.rollback()
-            return False, e
+            return False, _e
