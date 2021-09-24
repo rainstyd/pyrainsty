@@ -22,9 +22,9 @@ with open("README.md", "r") as fh:
 
 setup(
     name='pyrainsty',
-    version='0.0.10',
+    version='0.0.13',
     author='Residual Mark',
-    author_email='1285679912@qq.com',
+    author_email='rainstyd@sina.com',
     description='The toolset.',
     long_description=long_description,
     long_description_content_type="text/markdown",

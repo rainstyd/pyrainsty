@@ -26,11 +26,8 @@ class MysqlConnect(object):
 
         mc = connect.MysqlConnect(config)
         mc.create_connect()
-        state, result = mc.get_data('select * from test.test limit 1')
-        if not state:
-            print('error')
-        else:
-            print(result)
+        result = mc.get_data('select * from test.test limit 1')
+        print(result)
     """
 
     def __init__(self, _config, **kwargs):
@@ -58,12 +55,16 @@ class MysqlConnect(object):
             self.create_connect()
 
     def close_connect(self):
-        if self.__cursor:
-            self.__cursor.close()
-        if self.__conn:
-            self.__conn.close()
-        self.__cursor = None
-        self.__conn = None
+        try:
+            if self.__cursor:
+                self.__cursor.close()
+            if self.__conn:
+                self.__conn.close()
+            self.__cursor = None
+            self.__conn = None
+            return True
+        except (BaseException,):
+            return False
 
     def __del__(self):
         self.close_connect()
@@ -80,9 +81,9 @@ class MysqlConnect(object):
             _column = self.__cursor.description
 
             _result = [dict(zip([column[0] for column in _column], data)) for data in _data]
-            return True, _result
+            return _result
         except BaseException as _e:
-            return False, _e
+            raise _e
 
     def exec_cmd(self, sql, params=None):
         try:
@@ -92,7 +93,7 @@ class MysqlConnect(object):
             else:
                 self.__cursor.execute(sql)
             self.__conn.commit()
-            return True, None
+            return True
         except BaseException as _e:
             self.__conn.rollback()
-            return False, _e
+            raise _e
