@@ -3,7 +3,7 @@
 
 """
 @author: rainsty
-@file:   connect.py
+@file:   mysql_connect.py
 @time:   2019-12-29 10:06:29
 @description: connect data source
 """
@@ -14,7 +14,7 @@ import pymysql
 class MysqlConnect(object):
     """
     example:
-        from pyrainsty import connect
+        from pyrainsty import mysql_connect
         config = dict(
             host='127.0.0.1',
             port=3306,
