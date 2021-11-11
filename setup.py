@@ -22,7 +22,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='pyrainsty',
-    version='0.0.14',
+    version='0.0.15',
     author='Residual Mark',
     author_email='rainstyd@sina.com',
     description='The toolset.',
@@ -33,6 +33,8 @@ setup(
     install_requires=[
         'requests>=2.22.0',
         'pymysql>=0.9.3',
+        'redis>=3.3.8',
+        'psycopg2-binary>=2.8.3',
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

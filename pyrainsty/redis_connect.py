@@ -16,7 +16,7 @@ class RedisConnect(object):
 
     """
     example:
-        from pyrainsty import mysql_connect
+        from pyrainsty import redis_connect
         config = dict(
             host='127.0.0.1',
             port='6379',
